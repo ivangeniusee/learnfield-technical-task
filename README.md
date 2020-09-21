@@ -12,7 +12,7 @@ Technical notes
 -----------
 
 ### Using Koin
-In iOS app there for dependency injection `Assebler` was used. In Android environment there are lot of depency injection libraries and one of our favorites is Koin wich is very powerful and lighweight and will do the same job as it was done in iOS app bt `Assembler`.
+In iOS app there for dependency injection `Assebler` was used. In Android environment there are lot of depency injection libraries and one of our favorites is Koin wich is very powerful and lighweight and will do the same job as it was done in iOS app by `Assembler`.
 
 ### Using mp3
 In iOS app audio files where in `aifc` format which is not supported by Android natively (https://developer.android.com/guide/topics/media/media-formats). So do not overcomplicate technical challendge we just converted it to mp3.
