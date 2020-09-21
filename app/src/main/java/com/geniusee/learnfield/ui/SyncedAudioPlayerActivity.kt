@@ -22,7 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.inject
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class SyncedAudioPlayerActivity : AppCompatActivity() {
@@ -38,8 +37,7 @@ class SyncedAudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var audioItemController: AudioItemController
     private lateinit var binding: ActivityMainBinding
-
-    private var flashTimer: Timer? = null
+    
     private var queue = mutableListOf<AudioPlayItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,9 +57,6 @@ class SyncedAudioPlayerActivity : AppCompatActivity() {
     private fun configure() {
         binding.recyclerView.adapter = playItemsAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun start() {
         audioItemController = AudioItemController(
             playlist,
             disposeBag,
@@ -69,6 +64,9 @@ class SyncedAudioPlayerActivity : AppCompatActivity() {
             audioFactory,
             playItemStatus
         )
+    }
+
+    private fun start() {
         audioSystemController.setUp(listOf(AudioSystemOption.INPUT)) {
             val audio1 = AudioPlayItem(R.raw.android_test_stem_base, "androidTestStemBase")
             val audio2 = AudioPlayItem(R.raw.android_test_stem_hats, "androidTestStemHats")
