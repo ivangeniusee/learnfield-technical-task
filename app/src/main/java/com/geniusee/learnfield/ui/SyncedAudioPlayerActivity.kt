@@ -31,10 +31,6 @@ import kotlin.concurrent.schedule
 
 class SyncedAudioPlayerActivity : AppCompatActivity() {
 
-    private companion object {
-        val TAG = SyncedAudioPlayerActivity::class.java.simpleName
-    }
-
     private val audioSystemController: AudioSystemController by inject()
     private val musicalTimeSource: LinearMusicalTimeSource by inject()
     private val playlist: Playlist by inject()
