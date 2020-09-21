@@ -2,8 +2,8 @@ package com.geniusee.learnfield.model.playlist
 
 import com.geniusee.learnfield.model.playlist.item.AudioPlayItem
 import com.geniusee.learnfield.model.playlist.item.ScheduledItem
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 interface PlaylistReader {
     /// Stream that sends out audio items

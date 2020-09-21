@@ -1,10 +1,6 @@
 package com.geniusee.learnfield.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,13 +17,13 @@ import com.geniusee.learnfield.view.audio.AudioSystemController
 import com.geniusee.learnfield.view.audio.AudioSystemOption
 import com.geniusee.learnfield.view.audio.PlayItemStatus
 import com.geniusee.learnfield.view.audio.player.MediaPlayerFactory
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.addTo
-import kotlinx.coroutines.Dispatchers
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.inject
 import java.util.*
-import kotlin.concurrent.fixedRateTimer
-import kotlin.concurrent.schedule
+import java.util.concurrent.TimeUnit
 
 class SyncedAudioPlayerActivity : AppCompatActivity() {
 
@@ -98,6 +94,7 @@ class SyncedAudioPlayerActivity : AppCompatActivity() {
 
     private fun monitorStatus() {
         playItemStatus.onStarted.subscribe {
+            // Display recently started audio play item
             queue.add(it)
             playItemsAdapter.items = queue
             displayAudioPlayItem(it)
@@ -105,27 +102,31 @@ class SyncedAudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun flashPeriodically() {
+        // Flash red for 100ms every 4 musical ticks
         val now = musicalTimeSource.positionAndTempo.musicalTime(musicalTimeSource.systemTiming.now())
         val period = musicalTimeSource.positionAndTempo.systemTime(now + AppConfig.Timings.FLASH_MUSICAL_TICK) - musicalTimeSource.systemTiming.now()
-        flashTimer = fixedRateTimer(startAt = Date(), period = period.toMillis()) {
+
+        Observable.interval(0, period.toMillis(), TimeUnit.MILLISECONDS).subscribe {
             flashCircle()
-        }
+        }.addTo(disposeBag)
     }
 
     private fun flashCircle() {
+        // Flash red for 100ms
         binding.circleView.backgroundTintList = ContextCompat.getColorStateList(this, R.color.red)
-        Handler(Looper.getMainLooper()).postDelayed({
+        Observable.timer(AppConfig.Timings.FLASH_DURATION, TimeUnit.MILLISECONDS).subscribe {
             binding.circleView.backgroundTintList =
                 ContextCompat.getColorStateList(this@SyncedAudioPlayerActivity, R.color.white)
-        }, AppConfig.Timings.FLASH_DURATION)
+        }.addTo(disposeBag)
     }
 
     private fun displayAudioPlayItem(item: AudioPlayItem) {
+        // show play item for duration of 32 musical ticks.
         val now = musicalTimeSource.positionAndTempo.musicalTime(musicalTimeSource.systemTiming.now())
-        val period = musicalTimeSource.positionAndTempo.systemTime(now + AppConfig.Timings.PLAY_ITEM_MUSICAL_TICK) - musicalTimeSource.systemTiming.now()
-        Handler(Looper.getMainLooper()).postDelayed({
+        val delay = musicalTimeSource.positionAndTempo.systemTime(now + AppConfig.Timings.PLAY_ITEM_MUSICAL_TICK) - musicalTimeSource.systemTiming.now()
+        Observable.timer(delay.toMillis(), TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe {
             queue.remove(item)
             playItemsAdapter.items = queue
-        }, period.toMillis())
+        }.addTo(disposeBag)
     }
 }

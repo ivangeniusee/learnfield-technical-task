@@ -9,7 +9,7 @@ interface AudioPlayer {
     fun stop()
 
     /// Get current position relative to start
-    fun currentTime(): Int
+    fun currentTime(): Long
 
     /// Set a start handler
     fun setStartHandler(startHandler: ((AudioPlayer) -> Unit)?)
@@ -18,5 +18,5 @@ interface AudioPlayer {
     fun setCompletionHandler(completionHandler: ((AudioPlayer) -> Unit)?)
 
     /// Duration of the audio track
-    fun duration(): Int
+    fun duration(): Long
 }

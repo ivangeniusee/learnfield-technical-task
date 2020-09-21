@@ -1,8 +1,8 @@
 package com.geniusee.learnfield.view.audio
 
 import com.geniusee.learnfield.model.playlist.item.AudioPlayItem
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 interface PlayItemStatusReader {
     // called when playback started

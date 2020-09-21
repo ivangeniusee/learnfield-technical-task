@@ -5,8 +5,8 @@ import com.geniusee.learnfield.model.musicaltime.MusicalTimeSource
 import com.geniusee.learnfield.model.playlist.PlaylistReader
 import com.geniusee.learnfield.model.playlist.item.AudioPlayItem
 import com.geniusee.learnfield.model.playlist.item.ScheduledItem
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 
 class AudioItemController(
     playlist: PlaylistReader,
